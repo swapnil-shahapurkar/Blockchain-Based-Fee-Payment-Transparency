@@ -1,0 +1,22 @@
+{
+  "name": "blockc-project",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.2",
+    "path": "^0.12.7",
+    "solc": "^0.8.28",
+    "truffle": "^5.11.5",
+    "uuid": "^11.0.3",
+    "web3": "^1.10.4"
+  }
+}

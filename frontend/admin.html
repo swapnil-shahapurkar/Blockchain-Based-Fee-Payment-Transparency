@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Institution Name and Tagline */
+        .institution-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00ff7f;  /* Green color */
+            text-shadow: 0 0 7px #810276;
+            margin-top: 20px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 1px #fff;
+            margin-top: 5px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .navbar a {
+            color: #fff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #1e90ff;
+            cursor: pointer;
+        }
+
+        /* Main Section */
+        .main-content {
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 40px;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Sections for different options */
+        .section {
+            margin-bottom: 60px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #333;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        }
+
+        .section h2 {
+            color: #00c3ff;
+            font-size: 2.5rem;
+            text-align: center;
+            text-shadow: 0 0 2px #0800fa, 0 0 15px #1e90ff;
+            background-color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .section .content {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .section .content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .section .content li {
+            margin: 10px 0;
+            font-size: 1.4rem;
+            color: #fff;
+        }
+
+        /* Scrollable Boxes */
+        .scrollable-box {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #444;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Button Styles */
+        .button {
+            display: block;
+            width: 200px;
+            padding: 12px;
+            margin: 20px auto;
+            background-color: #32cd32;  /* Green color */
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #228b22;  /* Darker green on hover */
+        }
+
+        /* Input and Form Styles */
+        input[type="text"], input[type="number"], textarea {
+            width: 98%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        /* Glowing Effect */
+        .glowing-text {
+            text-shadow: 0 0 2px #1e90ff, 0 0 15px #1e90ff;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
+</head>
+<body>
+   
+    <div class="institution-name">The Nexus Academy of Celestial Wisdom</div>
+    <div class="tagline">"Ignite Your Future with Brilliance"</div>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="#transactions">View All Transactions</a>
+        <a href="#refunds">Accept/Reject Refund Requests</a>
+        <a href="#updateFees">Update Fee Schedule</a>
+        <a href="#addStudent">Add New Student</a>
+    </div>
+
+
+            
+                <!-- Main Content Section -->
+                <div class="main-content">
+                    <!-- View All Transactions Section -->
+                    <div id="transactions" class="section">
+                        <h2 class="glowing-text">View All Transactions</h2>
+                        <div class="content">
+                            <div class="scrollable-box" id="transaction-box">
+                                <!-- Transaction details will appear here -->
+                            </div>
+                            <input type="text" placeholder="Search by Transaction ID" id="searchTransactionId">
+                            <button class="button"  onclick="searchTransaction()">Search Transaction</button>
+                        </div>
+                    </div>
+            
+
+                        <!-- Accept/Reject Refund Requests Section -->
+                        <div id="refunds" class="section">
+                            <h2 class="glowing-text">Accept/Reject Refund Requests</h2>
+                            <div class="content">
+                                <div class="scrollable-box" id="refund-box">
+                                    <!-- Refund requests will appear here -->
+                                </div>
+                                <input type="text" id="refundIdInput" placeholder="Enter Refund ID">
+                                <button class="button" onclick="transactRefund(true)">Accept Refund</button>
+                                <button class="button" onclick="transactRefund(false)">Reject Refund</button>
+                                <div id="refundResult"></div>
+                            </div>
+                        </div>
+
+                    <div id="updateFees" class="section">
+                        <h2 class="glowing-text">Update Fee Schedule</h2>
+                        <div class="content">
+                            <form onsubmit="updateFeeSchedule(event)">
+                                <label for="feeType">Fee Type:</label>
+                                <input type="text" id="feeType" placeholder="Enter Fee Type (e.g., Tuition, Library)" required>
+                                
+                                <label for="feeAmount">Fee Amount:</label>
+                                <input type="number" id="feeAmount" placeholder="Enter Fee Amount" required>
+                                
+                                <label for="lastDate">Last Date to Pay:</label>
+                                <input type="Date" id="lastDate" required>
+                                
+                                <button type="submit" class="button">Update Fee Schedule</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="Supdateresult"></div>
+
+
+            
+                    <div id="addStudent" class="section">
+                        <h2 class="glowing-text">Audit A Transaction</h2>
+                        <div class="content">
+                            <form onsubmit="Auditing(event)">
+                                <label for="tid">Transaction ID:</label>
+                                <input type="text" id="transactionId" placeholder="Enter Transaction ID to be verified" required>
+                                <button type="submit" class="button">Audit</button>
+                            </form>
+                            <div id="auditResults"></div>
+                        </div>
+                    </div>
+            
+                    <script>
+
+                        let senderAddress = null;  // Global variable to store the sender address
+                        
+                        // Request connection to MetaMask and fetch Ethereum accounts
+                        async function checkMetaMaskConnection() {
+                            if (typeof window.ethereum === 'undefined') {
+                                alert("MetaMask is not installed. Please install MetaMask to continue.");
+                                return false;
+                            }
+                        
+                            // Request user to connect MetaMask if not already connected
+                            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                        
+                            if (accounts.length === 0) {
+                                alert("Please connect your MetaMask wallet.");
+                                return false;
+                            }
+                        
+                            // Use Web3 to convert address to checksummed format
+                            const web3 = new Web3(window.ethereum);
+                            senderAddress = web3.utils.toChecksumAddress(accounts[0]);
+                        
+                            alert(`Connected to MetaMask: ${senderAddress}`);
+                            console.log("Connected to MetaMask with address: " + senderAddress);
+                            return true;
+                        }
+                        
+                        // Fetch refund requests for the connected wallet address
+                        async function fetchRefundRequests() {
+                            if (!senderAddress) {
+                                alert("Please connect your MetaMask wallet first.");
+                                return;
+                            }
+                        
+                            try {
+                                const response = await fetch('/fetchrefund', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ address: senderAddress }),  // Send sender's address in the body
+                                });
+                        
+                                const refundStatusDiv = document.getElementById('refund-box');
+                                refundStatusDiv.innerHTML = ''; // Clear previously displayed refund status
+                        
+                                if (response.ok) {
+                                    const rawResponse = await response.json(); // Get the raw response, which is an array of refund details
+                                    console.log('Raw Response:', rawResponse);
+                        
+                                    if (Array.isArray(rawResponse) && rawResponse.length > 0) {
+                                        rawResponse.forEach(refund => {
+                                            const refundDiv = document.createElement('div');
+                                            refundDiv.className = 'refund-item';
+                                            refundDiv.style.marginBottom = '20px';
+                        
+                                            const heading = document.createElement('h3');
+                                            heading.textContent = 'Refund Request Details';
+                                            heading.style.color = 'cyan';
+                                            heading.style.textShadow = '0 0 1px cyan, 0 0 20px cyan';
+                                            refundDiv.appendChild(heading);
+                                            refundDiv.innerHTML += `
+    <div style="display: flex; flex-direction: column; padding: 10px; border: 1px solid #444; border-radius: 5px; width: 50%; background-color: #333; color: white; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Refund ID:</strong>
+            <span>${refund.transactionId}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Fee Type:</strong>
+            <span>${refund.feeType}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Refund Amount:</strong>
+            <span>$${refund.refundAmount}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Status:</strong>
+            <span>${refund.status}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Refund Reason:</strong>
+            <span>${refund.refundReason}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Sender Address:</strong>
+            <span>${refund.senderAddress}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Previous Transaction ID:</strong>
+            <span>${refund.PtransactionId}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+            <strong style="color: #f1e05a;">Date:</strong>
+            <span>${new Date(refund.timestamp).toLocaleString()}</span>
+        </div>
+    </div>
+`;
+
+                        
+                                            refundStatusDiv.appendChild(refundDiv);
+                                        });
+                                    } else {
+                                        console.error('No refund requests found:', rawResponse);
+                                        refundStatusDiv.textContent = 'No refund requests found for this address.';
+                                    }
+                                } else {
+                                    const errorMessage = await response.text();
+                                    console.error('Error fetching refund requests:', errorMessage);
+                                    refundStatusDiv.textContent = 'Failed to fetch refund requests.';
+                                }
+                            } catch (error) {
+                                console.error('Error in fetch request:', error);
+                                alert('An error occurred while fetching refund requests.');
+                            }
+                        }
+                        
+                        // Fetch transaction history for the connected wallet address
+                       // Function to load all transactions for a wallet address
+                       let transactionsData = [];  // Array to store all transactions
+
+// Function to load all transactions for a wallet address
+async function loadTransactionDetails() {
+    if (!senderAddress) {
+        alert("Please connect your MetaMask wallet first.");
+        return;
+    }
+
+    try {
+        const response = await fetch('/fetchPaymentHistory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ address: senderAddress }),
+        });
+
+        const paymentHistoryDiv = document.getElementById('transaction-box');
+        paymentHistoryDiv.innerHTML = ''; // Clear previously displayed transactions
+
+        if (response.ok) {
+            const rawResponse = await response.json();
+            console.log('Raw Response:', rawResponse);
+
+            if (Array.isArray(rawResponse) && rawResponse.length > 0) {
+                transactionsData = rawResponse; // Store transactions in array
+                displayTransactions(transactionsData); // Display all transactions initially
+            } else {
+                console.error('No transactions found:', rawResponse);
+                paymentHistoryDiv.textContent = 'No transactions found for this address.';
+            }
+        } else {
+            const errorMessage = await response.text();
+            console.error('Error fetching transactions:', errorMessage);
+            paymentHistoryDiv.textContent = 'Failed to fetch payment history.';
+        }
+    } catch (error) {
+        console.error('Error in fetch request:', error);
+        alert('An error occurred while fetching payment history.');
+    }
+}
+
+// Function to display transactions (used both for initial load and search)
+function displayTransactions(transactions) {
+    const paymentHistoryDiv = document.getElementById('transaction-box');
+    paymentHistoryDiv.innerHTML = ''; // Clear previous content
+
+    transactions.forEach(transaction => {
+        const transactionDiv = document.createElement('div');
+        transactionDiv.className = 'transaction-item';
+        transactionDiv.style.marginBottom = '20px';
+
+        const heading = document.createElement('h3');
+        heading.textContent = 'Transaction Details';
+        heading.style.color = 'cyan';
+        heading.style.textShadow = '0 0 10px cyan, 0 0 20px cyan, 0 0 30px #00ffff';
+        transactionDiv.appendChild(heading);
+        transactionDiv.innerHTML += `
+        <div style="display: flex; flex-direction: column; padding: 10px; border: 1px solid #444; border-radius: 5px; width: 60%; background-color: #333; color: white; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+                <strong style="color: #f1e05a;">Transaction ID:</strong>
+                <span>${transaction.transactionId}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+                <strong style="color: #f1e05a;">Sender Address:</strong>
+                <span>${transaction.senderAddress}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+                <strong style="color: #f1e05a;">Receiver Address:</strong>
+                <span>${transaction.receiverAddress}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+                <strong style="color: #f1e05a;">Amount:</strong>
+                <span>${transaction.amount}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+                <strong style="color: #f1e05a;">Status:</strong>
+                <span>${transaction.status}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px;">
+                <strong style="color: #f1e05a;">Date:</strong>
+                <span>${new Date(transaction.timestamp).toLocaleString()}</span>
+            </div>
+        </div>
+        `;
+        paymentHistoryDiv.appendChild(transactionDiv);
+    });
+}
+
+// Search function to filter transactions based on Transaction ID
+function searchTransaction() {
+    const transactionId = document.getElementById('searchTransactionId').value.trim().toLowerCase();
+
+    if (transactionId === '') {
+        // If search bar is empty, display all transactions
+        displayTransactions(transactionsData);
+    } else {
+        // Filter transactions by matching Transaction ID
+        const filteredTransactions = transactionsData.filter(transaction =>
+            transaction.transactionId.toLowerCase().includes(transactionId)
+        );
+        displayTransactions(filteredTransactions);
+    }
+}
+
+                        
+                        // Initialize data load when the page is loaded
+                        async function initializeDataLoad() {
+                            const isConnected = await checkMetaMaskConnection();
+                            if (isConnected) {
+                                await fetchRefundRequests();
+                                await loadTransactionDetails();
+                            }
+                        }
+                        
+                        // Handle refund decision (Accept/Reject)
+                        async function transactRefund(isAccepted) {
+                            const refundId = document.getElementById('refundIdInput').value;
+                            const refundResultDiv = document.getElementById('refundResult');
+                            refundResultDiv.textContent = ''; // Clear previous result
+                        
+                            if (!refundId) {
+                                refundResultDiv.textContent = 'Please enter a Refund ID.';
+                                return;
+                            }
+                        
+                            try {
+                                // Fetch refund details and status from the backend
+                                const response = await fetch('/refund/decision', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ refundId, status: isAccepted ? 'Accepted' : 'Rejected' }),
+                                });
+                                const result = await response.json();
+                        
+                                if (!response.ok) {
+                                    throw new Error(result.message || 'Failed to process refund decision.');
+                                }
+                        
+                                if (isAccepted) {
+                                    const { amount, receiverAddress } = result;
+                        
+                                    if (!window.ethereum) {
+                                        refundResultDiv.textContent = 'MetaMask is not installed. Please install it to proceed.';
+                                        return;
+                                    }
+                        
+                                    // Initialize Web3
+                                    const web3 = new Web3(window.ethereum);
+                        
+                                    // Request MetaMask connection
+                                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        
+                                    // Trigger MetaMask popup for the refund transaction
+                                    const txHash = await web3.eth.sendTransaction({
+                                        from: senderAddress,
+                                        to: receiverAddress,
+                                        value: web3.utils.toWei(amount.toString(), 'ether'),
+                                    });
+                        
+                                    // Track transaction status
+                                    const status = txHash ? 'Approved' : 'Canceled';
+                        
+                                    // Log the refund transaction to the backend
+                                    const logResponse = await fetch('/logtransaction', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            senderAddress,
+                                            receiverAddress,
+                                            refundId,
+                                            status,
+                                        }),
+                                    });
+                                    const logResult = await logResponse.json();
+                        
+                                    if (logResponse.ok) {
+                                        refundResultDiv.textContent = `Refund transaction successful! Transaction Hash: ${txHash.transactionHash}`;
+                                    } else {
+                                        console.error('Error logging refund transaction:', logResult.message);
+                                    }
+                                } else {
+                                    refundResultDiv.textContent = 'Refund request rejected.';
+                                }
+                            } catch (error) {
+                                console.error('Error processing refund:', error);
+                                refundResultDiv.textContent = `Transaction failed: ${error.message}`;
+                            }
+                        }
+
+                        async function Auditing(event) {
+                            event.preventDefault();  // Prevent form submission to avoid page reload
+
+                            const TID = document.getElementById('transactionId').value;
+                            
+                            if (!TID) {
+                                alert('Please enter a transaction ID.');
+                                return;
+                            }
+                             
+                            try {
+                                const response = await fetch('/verifyaudit', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ TID }),  // Send the transaction ID to the backend
+                                });
+
+                                const auditResultsDiv = document.getElementById('auditResults');
+                                auditResultsDiv.innerHTML = ''; // Clear previous results
+
+                                if (response.ok) {
+                                    const result = await response.json(); // Get the response from backend
+                                    auditResultsDiv.textContent = result.message; // Display the response message
+                                } else {
+                                    const errorMessage = await response.text();
+                                    auditResultsDiv.textContent = `Error: ${errorMessage}`; // Display error message
+                                }
+                            } catch (error) {
+                                console.error('Error in auditing request:', error);
+                                alert('An error occurred while auditing the transaction.');
+                            }
+                        }  async function Auditing(event) {
+            event.preventDefault();  // Prevent form submission to avoid page reload
+
+            const transactionId = document.getElementById('transactionId').value.trim();
+
+            if (!transactionId) {
+                alert('Please enter a transaction ID.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/verifyaudit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ transactionId }), // Send transactionId to the backend
+                });
+
+                const auditResultsDiv = document.getElementById('auditResults');
+                auditResultsDiv.innerHTML = ''; // Clear previous results
+
+                if (response.ok) {
+                    const result = await response.json(); // Parse the response
+                    auditResultsDiv.textContent = result.message; // Display the result message
+                } else {
+                    const errorMessage = await response.json();
+                    auditResultsDiv.textContent = `Error: ${errorMessage.message}`; // Display error message
+                }
+            } catch (error) {
+                console.error('Error in auditing request:', error);
+                alert('An error occurred while auditing the transaction.');
+            }
+        }
+                               
+                        
+
+                        async function updateFeeSchedule(event) {
+                            event.preventDefault();  // Prevent form from submitting normally
+
+                            const type = document.getElementById('feeType').value;  // Keep variable name 'type' as per schema
+                            const amount = document.getElementById('feeAmount').value;
+                            const duedate = document.getElementById('lastDate').value;
+
+                            // Ensure all fields are filled
+                            if (!type || !amount || !duedate) {
+                                alert('Please fill all fields.');
+                                return;
+                            }
+
+                            try {
+                                // Send the fee schedule data to the backend
+                                const response = await fetch('/updateSchedule', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        type,  // Send 'type' instead of 'feeType'
+                                        amount,  // Send 'amount' instead of 'feeAmount'
+                                        duedate,  // Send 'duedate' instead of 'lastDate'
+                                    }),  // Send the data as JSON
+                                });
+
+                                const resultDiv = document.getElementById('Supdateresult');
+                                resultDiv.innerHTML = ''; // Clear previous result
+
+                                if (response.ok) {
+                                    const result = await response.json(); // Get the response from the backend
+                                    resultDiv.textContent = result.message; // Display success message
+                                } else {
+                                    const errorMessage = await response.text();
+                                    resultDiv.textContent = `Error: ${errorMessage}`; // Display error message
+                                }
+                            } catch (error) {
+                                console.error('Error in updating fee schedule:', error);
+                                alert('An error occurred while updating the fee schedule.');
+                            }
+                        }
+                    // Event Listener: Load data after the DOM is ready
+                    
+                        
+                        // Event Listener: Load data after the DOM is ready
+                        window.addEventListener('DOMContentLoaded', initializeDataLoad);
+                        
+                        </script>
+                                 </body>
+            
+</html>

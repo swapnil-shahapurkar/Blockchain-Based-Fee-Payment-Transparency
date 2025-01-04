@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Payment Portal - Login</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            overflow-y: scroll;
+        }
+
+        /* Logo */
+        .logo {
+            position: absolute;
+            top: 15px;
+            width: 120px;
+            height: auto;
+        }
+
+        /* Institution Name and Tagline */
+        .institution-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fcfcfc;
+            text-shadow: 0 0 7px #810276;
+            margin-top: 70px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-top: 5px;
+            text-shadow: 0 0 5px #fff, 0 0 1px #fff;
+        }
+
+        /* Title Styles */
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            color: #1e90ff;
+            margin-top: 20px;
+            text-shadow: 0 0 2px #1e90ff, 0 0 2px #1e90ff;
+            text-decoration: underline;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        /* Glowing Text with Static Effect */
+        .glowing-text {
+            text-shadow: 0 0 2px #1e90ff, 0 0 10px #1e90ff;
+        }
+
+        .student-heading {
+            color: #32cd32;
+            text-shadow: 0 0 2px #32cd32, 0 0 10px #32cd32;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .admin-heading {
+            color: #ff6347;
+            text-shadow: 0 0 2px #ff6347, 0 0 10px #ff6347;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        /* Centered Login Container */
+        .login-container-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            width: 80%; /* Space from side walls */
+            max-width: 1000px;
+            margin-top: 40px;
+        }
+
+        .login-container {
+            background-color: rgba(255, 251, 251, 0.7); /* Darker background for contrast */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            width: 100%;
+            max-width: 450px;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Form Layout */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border: 2px solid #1e90ff;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #1e90ff;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #4682b4;
+        }
+
+    </style>
+</head>
+<body>
+    <img src="logo.png" alt="Institution Logo" class="logo">
+    <div class="institution-name">The Nexus Academy of Celestial Wisdom</div>
+    <div class="tagline">"Ignite Your Future with Brilliance"</div>
+    <h1 class="glowing-text">Fee Payment Portal</h1>
+
+    <div class="login-container-wrapper">
+        <!-- Student Login Section -->
+        <div class="login-container">
+            <h2 class="glowing-text student-heading">Login as Student</h2>
+            <form id="studentForm">
+                <input type="text" id="studentId" placeholder="Enter Student ID" required>
+                <input type="date" id="birthdate" placeholder="Enter Birthdate" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Admin Login Section -->
+        <div class="login-container">
+            <h2 class="glowing-text admin-heading">Login as Admin</h2>
+            <form id="adminForm">
+                <input type="text" id="adminUsername" placeholder="Admin Username" required>
+                <input type="password" id="adminPassword" placeholder="Admin Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+   document.getElementById('studentForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const studentId = document.getElementById('studentId').value;
+    const birthdate = document.getElementById('birthdate').value;
+
+    // Simulate student login logic
+    console.log(`Logging in as Student: ${studentId}, Birthdate: ${birthdate}`);
+
+    // Send login request to the backend
+    fetch('/student-login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: studentId, password: birthdate }), // Ensure proper data is sent
+    })
+    .then(response => response.json()) // Parse the JSON response
+    .then(data => {
+        // Check if login was successful (status code 200)
+        if (data.message === 'Student login successful') {
+            console.log('Login successful:', data);
+            // Redirect to the student portal
+            window.location.href = '/student.html'; // Redirect to the student portal page
+        } else {
+            console.log('Login failed:', data.message);
+            // Optionally, display an error message to the user
+            alert('Invalid credentials or error logging in!');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while logging in!');
+    });
+       });
+
+        document.getElementById('adminForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const adminUsername = document.getElementById('adminUsername').value;
+            const adminPassword = document.getElementById('adminPassword').value;
+
+            // Simulate admin login logic
+            console.log(`Logging in as Admin: ${adminUsername}`);
+
+            // Send login request to the backend
+            fetch('/admin-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ adminUsername, adminPassword }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message==="Student login successful") {
+                    // Redirect to admin dashboard if login is successful
+                    window.location.href = '/admin-dashboard';
+                } else {
+                    alert('Invalid credentials or user not found!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+        });
+    </script>
+</body>
+</html>
